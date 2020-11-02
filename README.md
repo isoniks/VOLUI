@@ -33,7 +33,7 @@ sudo apt-get install -y python-dev python-pip libfreetype6-dev libjpeg-dev build
 sudo pip install --upgrade pip wheel
 sudo pip install --upgrade setuptools
 sudo pip install --upgrade socketIO-client luma.core==1.8.3 luma.oled==3.1.0
-https://github.com/isoniks/volui.git
+git clone https://github.com/isoniks/volui.git
 chmod +x ~/volui/oledui.py
 sudo cp ~/volui/oledui.service /lib/systemd/system/
 sudo systemctl daemon-reload
