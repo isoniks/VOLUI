@@ -18,9 +18,8 @@ I'm going to use the product to retrofit my old Yamaha PianoCraft with modern RP
 * [luma.oled](https://luma-oled.readthedocs.io/)
 
 ## install
-get ssh access to Volumio
-https://volumio.github.io/docs/User_Manual/SSH.html
-
+get [ssh access to Volumio](https://volumio.github.io/docs/User_Manual/SSH.html), login
+and
 enable SPI bus by adding
 ```
 dtparam=spi=on
@@ -46,6 +45,6 @@ reboot
 ```
 sudo journalctl -fu oledui.service
 ```
-# Credits
-@Machine2501 for https://github.com/Maschine2501/NR1-UI
-@diehardsk for https://github.com/diehardsk/Volumio-OledUI
+# Credits & Kudos
+* @Machine2501 for https://github.com/Maschine2501/NR1-UI
+* @diehardsk for https://github.com/diehardsk/Volumio-OledUI
