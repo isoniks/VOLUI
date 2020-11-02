@@ -3,17 +3,15 @@
 from __future__ import unicode_literals
 
 """
-Volumio User Interface: OLED 256x64 + 2x rotary encoder with pushbutton
-DiehardSK 2020
-Inspired by Volumio HandsOn script
+Volumio OLED User Interface
+Designed for ssd1322 OLED 256x64 x Volumio 2 x RPi
+Inspired by diehardsk/Volumio-OledUI
 """
 
 import requests
 import os
 import sys
 import json
-import RPi.GPIO as GPIO
-GPIO.setmode(GPIO.BCM) 
 
 from time import time, sleep
 from threading import Thread
@@ -26,13 +24,10 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-from modules.pushbutton import PushButton
-from modules.rotaryencoder import RotaryEncoder
 from modules.display import *
 
 volumio_host = 'localhost'
 volumio_port = 3000
-VOLUME_DT = 5    #volume adjustment step
 
 volumioIO = SocketIO(volumio_host, volumio_port)
 
@@ -360,105 +355,6 @@ class MenuScreen():
             self.menuText[row].DrawOn(image, (5, self.menuYPos + row*16))
         if self.totaloptions == 0:
             self.menuText[0].DrawOn(image, (15, self.menuYPos))
-
-
-def LeftKnob_RotaryEvent(dir):
-    global emit_volume
-    if not oled.volumeControlDisabled and oled.state != STATE_PLAYLIST_MENU:
-        if dir == RotaryEncoder.LEFT:
-            oled.volume -= VOLUME_DT
-            oled.volume = max(oled.volume, 0)
-        elif dir == RotaryEncoder.RIGHT:
-            oled.volume += VOLUME_DT
-            oled.volume = min(oled.volume, 100)
-        oled.stateTimeout = 2.0
-        if oled.state != STATE_VOLUME:
-            SetState(STATE_VOLUME)
-        else:
-            oled.modal.DisplayVolume(oled.volume)
-        emit_volume = True
-
-def LeftKnob_PushEvent(hold_time):
-    global UPDATE_INTERVAL
-    if hold_time < 3:
-        print ('LeftKnob_PushEvent SHORT')
-        if oled.state == STATE_PLAYER:
-            if oled.playState == 'play':
-                volumioIO.emit('stop')
-            else:
-                volumioIO.emit('play')
-        if oled.state == STATE_PLAYLIST_MENU:
-            SetState(STATE_PLAYER)
-        if oled.state == STATE_LIBRARY_MENU:
-            LibraryReturn()
-    else:
-        print ('LeftKnob_PushEvent LONG -> trying to shutdown')
-        UPDATE_INTERVAL = 10 #stop updating screen
-        sleep(0.1)
-        show_logo("shutdown.ppm", oled)
-        try:
-            with open('oledconfig.json', 'w') as f:   #save current track number
-                json.dump({"track": oled.playPosition}, f)
-        except IOError:
-            print ('Cannot save config file to current working directory')
-        sleep(1.5)
-        oled.cleanup()            # put display into low power mode
-        volumioIO.emit('shutdown')
-        sleep(60)
-
-def RightKnob_RotaryEvent(dir):
-    global emit_track
-    if oled.state == STATE_PLAYLIST_MENU or oled.state == STATE_LIBRARY_MENU:
-        oled.stateTimeout = 20.0
-        if dir == RotaryEncoder.LEFT:
-            oled.modal.PrevOption()
-        elif dir == RotaryEncoder.RIGHT:
-            oled.modal.NextOption()
-
-    else:
-        oled.stateTimeout = 6.0
-        if oled.state != STATE_QUEUE_MENU:
-            SetState(STATE_QUEUE_MENU)
-        if dir == RotaryEncoder.LEFT:
-            oled.modal.PrevOption()
-        elif dir == RotaryEncoder.RIGHT:
-            oled.modal.NextOption()
-        oled.playPosition = oled.modal.SelectedOption()
-        emit_track = True
-
-
-
-def RightKnob_PushEvent(hold_time):
-    if hold_time < 1:
-        print ('RightKnob_PushEvent SHORT')
-        if oled.state == STATE_QUEUE_MENU:
-            oled.stateTimeout = 0          # return to player mode
-        elif oled.state != STATE_PLAYLIST_MENU and oled.state != STATE_LIBRARY_MENU:
-            volumioIO.emit('listPlaylist')
-            oled.stateTimeout = 20.0
-            SetState(STATE_PLAYLIST_MENU)
-            print ('Entering playlist menu')
-        else:
-            if oled.state == STATE_PLAYLIST_MENU:
-                LoadPlaylist(oled.playlistoptions[oled.modal.SelectedOption()])
-            if oled.state == STATE_LIBRARY_MENU:
-                oled.stateTimeout = 20.0
-                EnterLibraryItem(oled.modal.SelectedOption())
-    else:
-        print ('RightKnob_PushEvent LONG -> Music library browse')
-        oled.stateTimeout = 20.0
-        volumioIO.emit('browseLibrary',{'uri':'music-library'})
-
-LeftKnob_Push = PushButton(3, max_time=3)
-LeftKnob_Push.setCallback(LeftKnob_PushEvent)
-LeftKnob_Rotation = RotaryEncoder(5, 6, pulses_per_cycle=4)
-LeftKnob_Rotation.setCallback(LeftKnob_RotaryEvent)
-
-RightKnob_Push = PushButton(27, max_time=1)
-RightKnob_Push.setCallback(RightKnob_PushEvent)
-RightKnob_Rotation = RotaryEncoder(22, 23, pulses_per_cycle=4)
-RightKnob_Rotation.setCallback(RightKnob_RotaryEvent)
-#IR receiver is connected to port 13
 
 show_logo("volumio_logo.ppm", oled)
 sleep(2)
