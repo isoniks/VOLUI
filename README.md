@@ -1,15 +1,10 @@
-## Attention!
-Work in progress, don't use it now ...
-
 ## Purpose
-The purpose of this fork is to strip All button functionality from original Volumio-OledUI, retaining only dispaly functionality.
-I'm going to use the product to retrofit my old Yamaha PianoCraft with modern RPi, DAC and OLED screen.
-
+The purpose of this fork is to strip all button (pushbutton and rotary encoder) functionality from original Volumio-OledUI, retaining only display functionality.
+Convenient for next level of DYIing of Volumio player.
 
 ## Hardware
 * Raspberry Pi 2B/3B with Volumio2 image
-* 3.2" 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
-* Optional PCM51x2 DAC
+* 256x64 Pixels 4-wire SPI OLED Display with SSD1322 controller IC (e.g. ER-OLEDM032-1W)
 
 
 ## Dependencies
@@ -46,5 +41,5 @@ reboot
 sudo journalctl -fu oledui.service
 ```
 ## Credits & Kudos
-* @Machine2501 for https://github.com/Maschine2501/NR1-UI
-* @diehardsk for https://github.com/diehardsk/Volumio-OledUI
+@Machine2501 for https://github.com/Maschine2501/NR1-UI
+@diehardsk for https://github.com/diehardsk/Volumio-OledUI
