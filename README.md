@@ -42,5 +42,5 @@ sudo journalctl -fu oledui.service
 ```
 ## Credits & Kudos
 Thanks to following folks for their great projects:
-[diehardsk](https://github.com/diehardsk/Volumio-OledUI)
-[Maschine2501](https://github.com/Maschine2501/NR1-UI)
+* [diehardsk](https://github.com/diehardsk/Volumio-OledUI)
+* [Maschine2501](https://github.com/Maschine2501/NR1-UI)
