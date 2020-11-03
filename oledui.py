@@ -107,8 +107,6 @@ def SetState(status):
     if oled.state == STATE_PLAYER:
         oled.modal = NowPlayingScreen(oled.HEIGHT, oled.WIDTH, oled.activeArtist, oled.activeSong, font, hugefontaw)
         oled.modal.SetPlayingIcon(oled.playState, 0)
-    elif oled.state == STATE_VOLUME:
-        oled.modal = VolumeScreen(oled.HEIGHT, oled.WIDTH, oled.volume, font, font2)
 
 def onPushState(data):
     #print(data)
