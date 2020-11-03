@@ -46,7 +46,6 @@ class StaticText(Screen):
         self.center = center
         self.image = Image.new('RGB', (self.textwidth+2, self.textheight+2), bgcolor)
         self.draw = ImageDraw.Draw(self.image)
-        #self.draw.fontmode = "1"  #no antialiasing
         self.draw.text((0, 0), textlabel, font=font, fill=fill)
 
     def DrawOn(self, image, position):
