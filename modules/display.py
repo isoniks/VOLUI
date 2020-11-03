@@ -94,23 +94,3 @@ class ScrollText(Screen):
 
         temp = self.image.crop((i, 0, width+i, self.textheight))
         image.paste(temp, position)
-
-class Bar(Screen):
-    def __init__(self, height, width, barHeight, barWidth):
-        super(Bar, self).__init__(height, width)
-
-        self.barHeight = barHeight
-        self.barWidth = barWidth
-        self.filledPixels = 0
-
-        self.image = Image.new('RGB', (self.barWidth, self.barHeight))
-        self.draw = ImageDraw.Draw(self.image)
-
-    def SetFilledPercentage(self, percent):
-        self.filledPixels = int(self.barWidth*percent/100)
-
-    def DrawOn(self, image, position):
-        self.draw.rectangle((0, 0, self.barWidth-1 , self.barHeight-1), outline="white", fill="#2f2f2f")
-        self.draw.rectangle((1, 1, self.filledPixels-2 , self.barHeight-2), fill="white")
-        image.paste(self.image, position)
-
